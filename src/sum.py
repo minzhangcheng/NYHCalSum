@@ -28,7 +28,7 @@ __translate = {
     'value': '金额',
     'summary': '合计',
     'begin': '期初数',
-    'end': '年末结合数'
+    'end': '年末结余数'
 }
 
 def readType(filename='', sheetname=''):
