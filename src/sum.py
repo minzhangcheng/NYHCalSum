@@ -28,7 +28,9 @@ __translate = {
     'value': '金额',
     'summary': '合计',
     'begin': '期初数',
-    'end': '年末结余数'
+    'end': '年末结余数',
+    'income': '总收入',
+    'outcome': '总支出'
 }
 
 def readType(filename='', sheetname=''):
@@ -121,6 +123,10 @@ def writeSummary(sum, type, filename='', sheetname=''):
     for i in typeList:
         sh.write(y, x, i)
         x += 1
+    sh.write(y, x, __translate['income'])
+    x += 1
+    sh.write(y, x, __translate['outcome'])
+    x += 1
     sh.write(y, x, __translate['end'])
     lastC = col(x)
     
@@ -134,12 +140,22 @@ def writeSummary(sum, type, filename='', sheetname=''):
             sh.write(y, x, xlwt.Formula(formula))
         x += 1
         formula = 'B%d' % (y + 1)
+        income = '0'
+        outcome = '0'
         for symbol in type:
             for t in type[symbol]:
                 if t in sum[year]:
                     sh.write(y, x, sum[year][t])
                 formula += '+(%d)*%s%d' % (symbol, col(x), y + 1)
+                if symbol == 1:
+                    income += '+%s%d' % (col(x), y + 1)
+                if symbol == -1:
+                    outcome += '+%s%d' % (col(x), y + 1)
                 x += 1
+        sh.write(y, x, xlwt.Formula(income))
+        x += 1
+        sh.write(y, x, xlwt.Formula(outcome))
+        x += 1
         sh.write(y, x, xlwt.Formula(formula))
     
     x = 0
